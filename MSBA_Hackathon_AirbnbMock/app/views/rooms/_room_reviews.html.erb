@@ -1,0 +1,24 @@
+<% if @room.reviews_count == 0 %>
+  <div class="text-center">
+    <span>There are no reviews.</span>
+  </div>
+<% else %>
+
+  <% @reviews.page(params[:page]).each do |r| %>
+    <hr/>
+    <div class="row">
+      <div class="col-md-3 text-center">
+        <strong><%= r.reviewer_name %></strong>
+      </div>
+      <div class="col-md-9">
+        <div>
+          <span class="pull-right"><i class="fa fa-star" style="color:red" aria-hidden="true"></i> <%= r.rating %></span>
+        </div>
+
+        <div><%= r.date_time[0..9] %></div>
+        <div><%= r.text_reviews %></div>
+      </div>
+    </div>
+
+  <% end %>
+<% end %>

@@ -1,0 +1,24 @@
+<% rooms.each do |room| %>
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="col-md-4">
+        <br/>
+        <%= image_tag room.cover_photo(:medium), width:"220px", height:"130px" %>
+      </div>
+      <div class="col-md-8">
+        <br/>
+        <span class="pull-right"><i class="fa fa-star" style="color:red" aria-hidden="true"></i> <%= room.star_rating %> (<%= room.reviews_count %>)</span>
+        <div class="amenities">
+          <span class="<%= 'text-square' if room.plus == 0 %> e-badge e-badge-primary e-badge-pill red size_3">Plus</span>
+          <span class="<%= 'text-square' if room.primary_host_is_superhost == 0 %> e-badge e-badge-primary e-badge-pill size_3 green">Superhost</span>
+        </div>
+        <h4><%= link_to room.listing_name, room %></h4>
+        <div>
+          <%= pluralize(room.accommodate, "guest") %> - <%= pluralize(room.bed_room, "bedroom") %> - <%= pluralize(room.bed, "bed") %> - <%= pluralize(room.bath_room, "bathroom") %>
+        </div>
+        <br/>
+        <h4 class="pull-right">$<%= room.price %>/night</h4>
+      </div>
+    </div>
+  </div>
+<% end %>

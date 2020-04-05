@@ -1,0 +1,84 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <span>$<%= @room.price %> Per Night</span>
+    <span class="pull-right"><i class="fa fa-star" aria-hidden="true"></i> <%= @room.star_rating %> (<%= @room.reviews_count %> reviews)</span>
+  </div>
+
+  <div class="panel-body">
+    <%= form_for([@room, @room.reservations.new]) do |f| %>
+      <div class="row">
+        <div class="col-md-6">
+          <label>Check in</label>
+          <%= f.text_field :start_date, placeholder: "Start date", class: "form-control datepicker" %>
+        </div>
+
+        <div class="col-md-6">
+          <label>Check out</label>
+          <%= f.text_field :end_date, placeholder: "End date", placeholder: "End date", class: "form-control datepicker" %>
+        </div>
+      </div>
+
+      <div id="preview">
+        <table class="reservation-table">
+          <tbody>
+            <tr>
+              <td>Price</td>
+              <td class="text-right">$<%= @room.price %></td>
+            </tr>
+            <tr>
+              <td>Night</td>
+              <td class="text-right">x <span id="reservation_nights"></span></td>
+            </tr>
+            <tr>
+              <td>Total Price</td>
+              <td class="text-right">$<span id="reservation_total"></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <br/>
+
+      <%= f.submit "Book Now", class: "btn btn-normal btn-block" %>
+    <% end %>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+  $(function() {
+    $('#reservation_start_date').datepicker({
+      dateFormat: 'dd-mm-yy',
+      minDate: 0,
+      onSelect: function(selected) {
+        $('#reservation_end_date').datepicker("option", "minDate", selected);
+        $('#reservation_end_date').attr("disabled", false);
+
+        var start_date = $('#reservation_start_date').datepicker('getDate');
+        var end_date = $('#reservation_end_date').datepicker('getDate');
+        var nights = (end_date - start_date)/1000/60/60/24 + 1;
+        var total = nights * <%= @room.price %>;
+
+        $('#reservation_nights').text(nights);
+        $('#reservation_total').text(total);
+      }
+    });
+
+    $('#reservation_end_date').datepicker({
+      dateFormat: 'dd-mm-yy',
+      maxDate: 100,
+      onSelect: function(selected) {
+        $('#reservation_start_date').datepicker("option", "maxDate", selected);
+
+        var start_date = $('#reservation_start_date').datepicker('getDate');
+        var end_date = $('#reservation_end_date').datepicker('getDate');
+        var nights = (end_date - start_date)/1000/60/60/24 + 1;
+        var total = nights * <%= @room.price %>;
+
+        $('#reservation_nights').text(nights);
+        $('#reservation_total').text(total);
+      }
+    });
+  });
+</script>
